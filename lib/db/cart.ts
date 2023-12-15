@@ -16,3 +16,7 @@ export async function createCart() {
     subtotal: 0,
   };
 }
+
+export async function getCart() {
+  const localCartId = cookies().get("localCartId")?.value;
+}
