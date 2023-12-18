@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <main className="">
       <ProductHero />
-      <ProductList />;
+      <ProductList />
     </main>
   );
 }

@@ -3,15 +3,16 @@ import Image from "next/image";
 import PriceTag from "@/components/PriceTag";
 import NotFoundPage from "@/app/not-found";
 import { Metadata } from "next";
+import AddToCartButton from "@/components/AddToCartButton";
 
 interface Params {
-  params: { userId: string };
+  params: { productId: string };
 }
 
 export async function generateMetadata({
-  params: { userId: userId },
+  params: { productId: productId },
 }: Params): Promise<Metadata> {
-  const id = Number(userId);
+  const id = Number(productId);
   const product = await prisma.product.findUnique({
     where: { id: id },
   });
@@ -21,15 +22,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductPage({ params: { userId } }: Params) {
-  const id = Number(userId);
+export default async function ProductPage({ params: { productId } }: Params) {
+  const id = Number(productId);
   const product = await prisma.product.findUnique({ where: { id } });
   if (!product) {
     return <NotFoundPage />;
   }
 
   return (
-    <div className="flex-col lg:flex-row gap-4 lg:items-center">
+    <div className="flex flex-col lg:flex-row gap-4 lg:items-center">
       <Image
         src={product.imageUrl}
         alt={`image of ${product.name}`}
@@ -43,6 +44,7 @@ export default async function ProductPage({ params: { userId } }: Params) {
         <h1 className="text-5xl font-bold">{product.name}</h1>
         <PriceTag price={product.price} className="mt-4" />
         <p className="py-6">{product.description}</p>
+        <AddToCartButton productId={product.id.toString()} />
       </div>
     </div>
   );

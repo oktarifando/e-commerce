@@ -1,5 +1,5 @@
 import { prisma } from "./prisma";
-import { cookies } from "next/dist/client/components/headers";
+import { cookies } from "next/headers";
 import { cart, Prisma } from "@prisma/client";
 
 export async function createCart() {
@@ -7,7 +7,7 @@ export async function createCart() {
     data: {},
   });
 
-  cookies().set("localCartId", newCart.id);
+  cookies().set("localCartId", newCart.id.toString());
 
   return {
     ...newCart,
@@ -18,5 +18,11 @@ export async function createCart() {
 }
 
 export async function getCart() {
-  const localCartId = cookies().get("localCartId")?.value;
+  const localId = cookies().get("localCartId")?.value || "";
+  const localCartId = parseInt(localId)
+  const cart = localCartId ? await prisma.cart.findUnique({ 
+    where: { id : localCartId },
+    include: {
+      items : true
+    }})
 }

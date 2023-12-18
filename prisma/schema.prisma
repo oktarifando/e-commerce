@@ -9,34 +9,42 @@ datasource db {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Product {
-  id          Int         @id @default(autoincrement())
-  name        String      @db.VarChar
+  id          Int          @id @unique @default(autoincrement()) @map("id")
+  name        String       @db.VarChar
   description String
-  imageUrl    String      @db.VarChar
+  imageUrl    String       @db.VarChar
   price       Int
-  createdAt   DateTime    @db.Timestamptz(6)
-  updatedAt   DateTime    @updatedAt @db.Timestamptz(6)
-  cartitems   cartitems[]
+  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime     @updatedAt @db.Timestamptz(6)
+  category    String       @db.VarChar
+  cart_items  cart_items[]
 
   @@map("products")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model cart {
-  id        Int         @id @default(autoincrement())
-  createdAt DateTime    @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime    @db.Timestamptz(6)
-  items     cartitems[]
+  id         Int          @id @unique @default(autoincrement())
+  createdAt  DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime     @updatedAt @db.Timestamptz(6)
+  cart_items cart_items[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model cartitems {
-  id         Int     @default(autoincrement())
+model cart_items {
+  id         Int     @unique(map: "cartitems_id_key") @default(autoincrement())
   product_id Int
   quantity   Int
   cart_id    Int
   cart       cart    @relation(fields: [cart_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   products   Product @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@id([product_id, id, cart_id])
+  @@id([id, product_id, cart_id])
+  @@map("cart-items")
+}
+
+enum categories_product {
+  men
+  women
+  child
 }
