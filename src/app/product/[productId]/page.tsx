@@ -3,7 +3,6 @@ import Image from "next/image";
 import PriceTag from "@/components/PriceTag";
 import NotFoundPage from "@/app/not-found";
 import { Metadata } from "next";
-import AddToCartButton from "@/app/cart/AddToCartButton";
 
 interface Params {
   params: { productId: string };
@@ -44,7 +43,7 @@ export default async function ProductPage({ params: { productId } }: Params) {
         <h1 className="text-5xl font-bold">{product.name}</h1>
         <PriceTag price={product.price} className="mt-4" />
         <p className="py-6">{product.description}</p>
-        <AddToCartButton productId={product.id.toString()} />
+        <button className="btn btn-primary mt-4">Beli Sekarang</button>
       </div>
     </div>
   );
