@@ -46,10 +46,10 @@ export default async function UserMenuButton() {
     return (
       <div className="navbar-user gap-x-4 text-lg">
         <LoginLink className="hover:shadow-2xl hover:text-primary">
-          Sign In
+          Masuk
         </LoginLink>
         <RegisterLink className="hover:shadow-2xl hover:text-primary">
-          Sign Up
+          Daftar
         </RegisterLink>
       </div>
     );
