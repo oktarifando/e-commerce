@@ -1,7 +1,10 @@
 import { handleAuth } from "@kinde-oss/kinde-auth-nextjs/server";
 import { NextRequest } from "next/server";
 
-export async function GET(request: Request | NextRequest, { params }: any) {
+export async function GET(
+  request: Request | NextRequest,
+  { params }: void | Response | Promise<void | Response>
+) {
   const endpoint = params.kindeAuth;
   return handleAuth(request, endpoint);
 }
