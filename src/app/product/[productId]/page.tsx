@@ -3,7 +3,7 @@ import Image from "next/image";
 import PriceTag from "@/components/PriceTag";
 import NotFoundPage from "@/app/not-found";
 import { Metadata } from "next";
-import AddToCartButton from "@/components/AddToCartButton";
+import AddToCartButton from "@/app/cart/AddToCartButton";
 
 interface Params {
   params: { productId: string };

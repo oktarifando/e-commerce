@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import ecommerceLogo from "../../public/ecommerce logo.png";
+import ecommerceLogo from "../../../public/ecommerce logo.png";
 
 interface AddToCartButtonProps {
   productId: string;

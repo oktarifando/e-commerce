@@ -23,7 +23,7 @@ const ProductCard = ({
   const isNew =
     Date.now() - new Date(createdAt).getTime() < 1000 * 60 * 60 * 24 * 7;
   return (
-    <div className="card w-full bg-base-100 shadow-xl">
+    <div className="card w-fullbg-base-100 shadow-xl">
       <figure>
         <Image
           src={imageUrl}

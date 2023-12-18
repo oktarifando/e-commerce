@@ -3,8 +3,15 @@ import React from "react";
 import { prisma } from "../../../lib/db/prisma";
 import Link from "next/link";
 
-export default async function ProductHero() {
+export default async function ProductHeroChild() {
   const latestProduct = await prisma.product.findFirst({
+    where: {
+      OR: [
+        { name: { contains: "anak", mode: "insensitive" } },
+        { category: { contains: "anak", mode: "insensitive" } },
+        { description: { contains: "anak", mode: "insensitive" } },
+      ],
+    },
     orderBy: { id: "desc" },
   });
 
@@ -15,7 +22,7 @@ export default async function ProductHero() {
   return (
     <div>
       <div className="hero bg-base-200 rounded-xl mb-10 w-full">
-        <div className="hero-content flex-col lg:flex-row justify-center">
+        <div className="hero-content flex-col lg:flex-row justify-center items-center">
           <Image
             src={latestProduct.imageUrl}
             alt={`image of ${latestProduct.name}`}
@@ -24,7 +31,8 @@ export default async function ProductHero() {
             className="w-full max-w-sm rounded-lg shadow-2xl"
             priority
           />
-          <div>
+
+          <div className="text-center lg:text-left">
             <h1 className="text-5xl font-bold">{latestProduct.name}</h1>
             <p className="py-6">{latestProduct.description}</p>
             <Link

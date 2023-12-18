@@ -1,6 +1,7 @@
 import React from "react";
 import { prisma } from "../../../lib/db/prisma";
 import { redirect } from "next/navigation";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 async function addProductToDB(formData: FormData) {
   "use server";
@@ -13,10 +14,18 @@ async function addProductToDB(formData: FormData) {
       price: Number(formData.get("price")),
     },
   });
+
   redirect("/");
 }
 
 export default async function AddProduct() {
+  const { isAuthenticated } = getKindeServerSession();
+  const isLoggedIn = await isAuthenticated();
+
+  if (!isLoggedIn) {
+    redirect("/api/auth/login");
+  }
+
   return (
     <div className="">
       <h1 className="mb-3 text-lg font-bold">Tambah Produk Baru</h1>
