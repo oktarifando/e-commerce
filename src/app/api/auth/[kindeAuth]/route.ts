@@ -1,5 +1,5 @@
 import { handleAuth } from "@kinde-oss/kinde-auth-nextjs/server";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
   params: {
@@ -8,6 +8,7 @@ interface Props {
 }
 
 type AuthEndpoints =
+  | string
   | "login"
   | "logout"
   | "register"
