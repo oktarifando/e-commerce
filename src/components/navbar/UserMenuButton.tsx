@@ -44,7 +44,7 @@ export default async function UserMenuButton() {
 
   if (!isLoggedIn) {
     return (
-      <div className="navbar-user gap-x-4 text-lg">
+      <div className="navbar-user gap-x-7 text-lg">
         <LoginLink className="hover:shadow-2xl hover:text-primary">
           Masuk
         </LoginLink>
