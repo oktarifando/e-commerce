@@ -1,24 +1,23 @@
+"use client";
+
 import Image from "next/image";
 import userProfileIcon from "../../../public/user-profile-icon.png";
-import {
-  RegisterLink,
-  LoginLink,
-  LogoutLink,
-  getKindeServerSession,
-} from "@kinde-oss/kinde-auth-nextjs/server";
+import { signIn, signOut, useSession } from "next-auth/react";
 
-export default async function UserMenuButton() {
-  const { isAuthenticated, getUser } = getKindeServerSession();
-  const user = await getUser();
-  const isLoggedIn = await isAuthenticated();
+export default function UserMenuButton() {
+  const { data: session } = useSession();
 
-  if (isLoggedIn) {
+  if (session && session.user) {
     return (
       <div className="gap-x-10 text-lg">
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-            <Image src={userProfileIcon} alt="Avatar" className="w-10 h-10" />
-            <p className="-mt-3">{user?.given_name}</p>
+            <Image
+              src={userProfileIcon}
+              alt="Avatar"
+              className="w-10 h-10 -mt-3"
+            />
+            <p className="-mt-4">{session.user?.name}</p>
           </label>
 
           <ul
@@ -34,23 +33,26 @@ export default async function UserMenuButton() {
           </ul>
         </div>
         <div>
-          <LogoutLink className="hover:shadow-2xl hover:text-primary">
-            Logout
-          </LogoutLink>
+          <button
+            onClick={() => signOut()}
+            className="hover:shadow-2xl hover:text-primary"
+          >
+            Keluar
+          </button>
         </div>
       </div>
     );
   }
 
-  if (!isLoggedIn) {
+  if (!session) {
     return (
       <div className="navbar-user gap-x-7 text-lg">
-        <LoginLink className="hover:shadow-2xl hover:text-primary">
+        <button
+          onClick={() => signIn()}
+          className="hover:shadow-2xl hover:text-primary"
+        >
           Masuk
-        </LoginLink>
-        <RegisterLink className="hover:shadow-2xl hover:text-primary">
-          Daftar
-        </RegisterLink>
+        </button>
       </div>
     );
   }
