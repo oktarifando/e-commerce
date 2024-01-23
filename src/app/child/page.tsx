@@ -1,7 +1,7 @@
 import PaginationBar from "@/components/PaginationBar";
 import { prisma } from "../../../lib/db/prisma";
-import ProductHeroChild from "./ProductHeroChild";
-import ProductListChild from "./ProductListChild";
+import ProductList from "@/components/ProductList";
+import ProductHero from "@/components/ProductHero";
 
 interface HomeProps {
   searchParams: { page?: string };
@@ -10,15 +10,23 @@ interface HomeProps {
 export default async function ChildPage({
   searchParams: { page = "1" },
 }: HomeProps) {
+  const categoryPage = "anak";
   const currentPage = parseInt(page);
-  const pageSize = 6;
+  const pageSize = 9;
   const heroItemCount = 1;
-  const totalItemCount = await prisma.product.count();
+  const totalItemCount = await prisma.product.count({
+    where: {
+      category: {
+        contains: "anak",
+      },
+    },
+  });
   const totalPages = Math.ceil((totalItemCount - heroItemCount) / pageSize);
   return (
     <main className="flex flex-col items-center">
-      <ProductHeroChild />
-      <ProductListChild
+      <ProductHero categoryPage={categoryPage} />
+      <ProductList
+        categoryPage={categoryPage}
         currentPage={currentPage}
         pageSize={pageSize}
         heroItemCount={heroItemCount}

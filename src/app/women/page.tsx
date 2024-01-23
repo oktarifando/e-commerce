@@ -1,8 +1,8 @@
 import React from "react";
-import ProductHeroWomen from "./ProductHeroWomen";
-import ProductListWomen from "./ProductListWomen";
 import { prisma } from "../../../lib/db/prisma";
 import PaginationBar from "@/components/PaginationBar";
+import ProductHero from "@/components/ProductHero";
+import ProductList from "@/components/ProductList";
 
 interface HomeProps {
   searchParams: { page?: string };
@@ -10,15 +10,23 @@ interface HomeProps {
 export default async function WomenPage({
   searchParams: { page = "1" },
 }: HomeProps) {
+  const categoryPage = "wanita";
   const currentPage = parseInt(page);
-  const pageSize = 6;
+  const pageSize = 9;
   const heroItemCount = 1;
-  const totalItemCount = await prisma.product.count();
+  const totalItemCount = await prisma.product.count({
+    where: {
+      category: {
+        contains: "wanita",
+      },
+    },
+  });
   const totalPages = Math.ceil((totalItemCount - heroItemCount) / pageSize);
   return (
     <main className="flex flex-col items-center">
-      <ProductHeroWomen />
-      <ProductListWomen
+      <ProductHero categoryPage={categoryPage} />
+      <ProductList
+        categoryPage={categoryPage}
         currentPage={currentPage}
         pageSize={pageSize}
         heroItemCount={heroItemCount}

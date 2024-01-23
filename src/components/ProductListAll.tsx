@@ -6,26 +6,18 @@ interface productListProps {
   currentPage: number;
   pageSize: number;
   heroItemCount: number;
-  categoryPage: string;
 }
 
 export default async function ProductList({
   currentPage,
   pageSize,
   heroItemCount,
-  categoryPage,
 }: productListProps) {
   const skip = (currentPage - 1) * pageSize + heroItemCount;
   const take = pageSize;
-
   const allProducts = await prisma.product.findMany({
     orderBy: {
       id: "desc",
-    },
-    where: {
-      category: {
-        contains: categoryPage,
-      },
     },
     skip: skip,
     take: take,

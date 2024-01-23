@@ -1,21 +1,19 @@
 import React from "react";
-import { prisma } from "../../lib/db/prisma";
-import ProductCard from "./ProductCard";
+import { prisma } from "../../../lib/db/prisma";
+import ProductCard from "../../components/ProductCard";
 
-interface productListProps {
+interface productListSearchProps {
   currentPage: number;
   pageSize: number;
-  heroItemCount: number;
-  categoryPage: string;
+  query: string;
 }
 
-export default async function ProductList({
+export default async function ProductListSearch({
   currentPage,
   pageSize,
-  heroItemCount,
-  categoryPage,
-}: productListProps) {
-  const skip = (currentPage - 1) * pageSize + heroItemCount;
+  query,
+}: productListSearchProps) {
+  const skip = (currentPage - 1) * pageSize;
   const take = pageSize;
 
   const allProducts = await prisma.product.findMany({
@@ -23,9 +21,11 @@ export default async function ProductList({
       id: "desc",
     },
     where: {
-      category: {
-        contains: categoryPage,
-      },
+      OR: [
+        { name: { contains: query, mode: "insensitive" } },
+        { category: { contains: query, mode: "insensitive" } },
+        { description: { contains: query, mode: "insensitive" } },
+      ],
     },
     skip: skip,
     take: take,

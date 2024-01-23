@@ -1,17 +1,22 @@
 import React from "react";
 import { prisma } from "../../../lib/db/prisma";
-import ProductCard from "../../components/ProductCard";
+import ProductListSearch from "@/app/search/ProductListSearch";
+import PaginationBarSearch from "@/app/search/PaginationBarSearch";
 
 interface searchPageProps {
   searchParams: {
     query: string;
+    page?: string;
   };
 }
 
 export default async function SearchPage({
-  searchParams: { query },
+  searchParams: { query, page = "1" },
 }: searchPageProps) {
-  const products = await prisma.product.findMany({
+  const currentPage = parseInt(page);
+  const pageSize = 9;
+
+  const totalItemCount = await prisma.product.count({
     where: {
       OR: [
         { name: { contains: query, mode: "insensitive" } },
@@ -20,26 +25,26 @@ export default async function SearchPage({
       ],
     },
   });
+  const totalPages = Math.ceil(totalItemCount / pageSize);
 
-  if (products.length === 0) {
-    return <div className="text-center p-8">Produk Tidak Ditemukan</div>;
+  if (totalItemCount === 0) {
+    return <div>Produk Tidak Ditemukan !</div>;
   }
 
   return (
-    <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-      {products.map((product) => {
-        return (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            name={product.name}
-            description={product.description}
-            price={product.price}
-            imageUrl={product.imageUrl}
-            createdAt={product.createdAt}
-          />
-        );
-      })}
+    <main className="flex flex-col items-center">
+      <ProductListSearch
+        query={query}
+        currentPage={currentPage}
+        pageSize={pageSize}
+      />
+      {totalPages > 1 && (
+        <PaginationBarSearch
+          currentPage={currentPage}
+          totalPages={totalPages}
+          query={query}
+        />
+      )}
     </main>
   );
 }

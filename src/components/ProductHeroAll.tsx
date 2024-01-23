@@ -3,17 +3,8 @@ import React from "react";
 import { prisma } from "../../lib/db/prisma";
 import Link from "next/link";
 
-interface ProductHeroProps {
-  categoryPage: string;
-}
-
-export default async function ProductHero({ categoryPage }: ProductHeroProps) {
+export default async function ProductHero() {
   const latestProduct = await prisma.product.findFirst({
-    where: {
-      category: {
-        contains: categoryPage,
-      },
-    },
     orderBy: {
       id: "desc",
     },
