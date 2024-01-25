@@ -16,7 +16,7 @@ export default async function ProductListSearch({
   const skip = (currentPage - 1) * pageSize;
   const take = pageSize;
 
-  const allProducts = await prisma.product.findMany({
+  const searchProducts = await prisma.product.findMany({
     orderBy: {
       id: "desc",
     },
@@ -32,7 +32,7 @@ export default async function ProductListSearch({
   });
   return (
     <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-7 mb-10">
-      {allProducts.map((product) => {
+      {searchProducts.map((product) => {
         return (
           <ProductCard
             key={product.id}
